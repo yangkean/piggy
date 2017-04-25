@@ -1,0 +1,8 @@
+<%- include('components/header') %>
+<%- include('components/nav') %>
+<div class="ui centered grid">
+  <% posts.forEach((post) => { %>
+    <%- include('session', {post: post}) %>
+  <% }) %>
+</div>
+<%- include('components/footer') %>

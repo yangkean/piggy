@@ -1,0 +1,28 @@
+{
+  "name": "piggy",
+  "version": "1.0.0",
+  "description": "a simple blog framework, based on express.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://yangkean@github.com/yangkean/piggy.git"
+  },
+  "keywords": [
+    "expressjs",
+    "blog-framework",
+    "piggy"
+  ],
+  "author": "Sam Yang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yangkean/piggy/issues"
+  },
+  "homepage": "https://github.com/yangkean/piggy#readme",
+  "dependencies": {
+    "ejs": "^2.5.6",
+    "express": "^4.15.2"
+  }
+}

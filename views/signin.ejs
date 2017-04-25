@@ -1,0 +1,17 @@
+<%- include('components/header') %>
+<%- include('components/nav') %>
+<div class="ui centered grid">
+  <div class="ui six wide column raised segment">
+    <h1 class="ui centered header">登录</h1>
+    <form class="ui form" method="post" action="/signup">
+      <div class="field">
+        <input type="text" name="username" placeholder="用户名" required>
+      </div>
+      <div class="field">
+        <input type="password" name="password" placeholder="密码" required>
+      </div>
+      <input class="ui fluid teal button" type="submit" value="提交">
+    </form>
+  </div>
+</div>
+<%- include('components/footer') %>
