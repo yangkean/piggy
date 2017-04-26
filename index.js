@@ -1,6 +1,8 @@
 const path = require('path');
 const express = require('express');
+const formidable = require('express-formidable'); // 处理表单提交的中间件
 const app = express();
+const routes = require('./routes');
 
 // 设置静态资源文件目录
 app.use(express.static(path.join(__dirname, 'public')));
@@ -9,21 +11,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.get('/', (req, res) => {
-  res.render('home');
-});
+// 处理表单提交
+app.use(formidable({
+  encoding: 'utf-8',
+}));
 
-app.get('/signup', (req, res) => {
-  res.render('signup');
-});
-
-app.get('/signin', (req, res) => {
-  res.render('signin');
-});
-
-app.get('/blogs', (req, res) => {
-  res.render('blogs', {posts: [{title: 'hello', content: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.'}, {title: 'hello', content: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.'}]});
-});
+// 绑定路由
+routes(app);
 
 app.listen(3000, () => {
   console.log('Server is listening on http://localhost:3000');
