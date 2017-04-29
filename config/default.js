@@ -1,6 +1,8 @@
 exports = module.exports = {
   site: {
     title: 'piggy',
+    owner: 'Sam Yang',
+    password: 'sam',
   },
   port: 3000,
   session: {
@@ -19,5 +21,6 @@ exports = module.exports = {
       min: 0,
       idle: 12000,
     },
+    timezone: '+08:00',
   },
 };

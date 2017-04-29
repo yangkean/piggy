@@ -1,18 +1,42 @@
 const express = require('express');
-const bcrypt = require('bcryptjs'); // 用于密码加密的中间件
+const sha256 = require("crypto-js/sha256"); // 普通加密
+const bcrypt = require('bcryptjs'); // 更强大的加密中间件
+const config = require('config-lite')(__dirname);
 const router = express.Router();
 const UserModel = require('../models/user');
+
+// 自动注册网站拥有者账号
+UserModel.findOne(config.site.owner)
+.then(
+  function(result) {
+    if(!result) {
+      const uid = sha256(config.site.owner).toString();
+      const hash = bcrypt.hashSync(config.site.password);
+
+      const user = {
+        username: config.site.owner,
+        uid: uid,
+        website: '',
+        email: '',
+        password: hash,
+      };
+      UserModel.create(user)
+      .then(() => console.log('Owner account is created...'))
+      .catch((err) => console.log(err));
+    }
+  }
+);
 
 router.get('/', (req, res) => {
   res.render('signup');
 });
 
 router.post('/', (req, res, next) => {
-  let username = req.fields.username;
-  let website = req.fields.webiste || '';
-  let email = req.fields.email;
-  let password = req.fields.password;
-  let repassword = req.fields.repassword;
+  const username = req.fields.username;
+  const website = req.fields.webiste || '';
+  const email = req.fields.email;
+  const password = req.fields.password;
+  const repassword = req.fields.repassword;
 
   try {
     if(username.length < 3 || username.length >10) {
@@ -33,10 +57,12 @@ router.post('/', (req, res, next) => {
     return res.redirect('/signup');
   }
 
+  const uid = sha256(username).toString();
   const hash = bcrypt.hashSync(password);
 
-  let user = {
+  const user = {
     username: req.fields.username,
+    uid: uid,
     website: req.fields.website || '',
     email: req.fields.email,
     password: hash,
@@ -45,7 +71,7 @@ router.post('/', (req, res, next) => {
   UserModel.create(user)
   .then(
     function(result) {
-      let userObj = result.dataValues;
+      const userObj = result.dataValues;
 
       delete userObj.password;
 
@@ -53,7 +79,7 @@ router.post('/', (req, res, next) => {
 
       req.flash('success', '注册成功');
 
-      res.redirect('/home');
+      res.redirect('/posts');
     }
   )
   .catch(

@@ -8,8 +8,8 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res, next) => {
-  let username = req.fields.username;
-  let password = req.fields.password;
+  const username = req.fields.username;
+  const password = req.fields.password;
 
   UserModel.findOne(username)
   .then(
@@ -20,8 +20,8 @@ router.post('/', (req, res, next) => {
         return res.redirect('/signin');
       }
 
-      let userObj = result.dataValues;
-      let isCorrect = bcrypt.compareSync(password, userObj.password);
+      const userObj = result.dataValues;
+      const isCorrect = bcrypt.compareSync(password, userObj.password);
 
       if(isCorrect) {
         delete userObj.password;
@@ -30,7 +30,7 @@ router.post('/', (req, res, next) => {
 
         req.flash('success', '登录成功');
 
-        res.redirect('/home');
+        res.redirect('/posts');
       }
       else {
         req.flash('error', '用户名或密码不正确');

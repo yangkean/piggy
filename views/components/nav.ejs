@@ -1,7 +1,7 @@
 <div class="ui fixed borderless stackable large menu">
   <div class="ui container">
     <a class="item" href="/">主页</a>
-    <a class="item" href="/blogs">博客</a>
+    <a class="item" href="/posts">博客</a>
     <div class="right menu">
       <div class="item">
         <div class="ui icon input">
@@ -9,8 +9,24 @@
           <i class="search icon"></i>
         </div>
       </div>
-      <a class="item" href="/signup">注册</a>
-      <a class="item" href="/signin">登录</a>
+      <% if(!user) { %>
+        <a class="item" href="/signup">注册</a>
+        <a class="item" href="/signin">登录</a>
+      <% } %>
+
+      <% if(user && user.username === site.owner) { %>
+        <div class="ui dropdown item">
+          <div class="text"><%= user.username %></div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <a class="item" href="/posts/creation">新建</a>
+          </div>
+        </div>
+        <a class="item" href="/signout">登出</a>
+      <% } else if(user) { %>
+        <a class="item" href="/user/<%= user.uid %>"><%= user.username %></a>
+        <a class="item" href="/signout">登出</a>
+      <% } %>
     </div>
   </div>
 </div>
