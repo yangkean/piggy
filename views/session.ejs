@@ -2,9 +2,9 @@
   <h1 class="ui header"><%= post.title %></h1>
 
   <% if(post.content.length > 200 ) { %>
-    <p><%= post.content.slice(0, 200) %></p>
+    <div class="piggy-session"><%- post.content.slice(0, 200) %></div>
   <% } else { %>
-    <p><%= post.content %></p>
+    <div class="piggy-session"><%- post.content %></div>
   <% } %>
 
   <a class="ui right labeled blue icon button floated" href="/posts/<%= post.postId %>">

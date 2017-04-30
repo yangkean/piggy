@@ -1,3 +1,16 @@
 body {
-  padding-top: 50px !important;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  font-size: 16px;
+  height: auto;
+}
+.piggy-session {
+  margin-bottom: 20px;
+}
+.piggy-metadata {
+  font-size: .9em;
+  color: #bbb;
+}
+.piggy-pv {
+  margin-right: 10px;
 }

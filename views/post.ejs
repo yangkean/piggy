@@ -3,8 +3,31 @@
 <div class="ui centered grid">
   <div class="ui raised segment ten wide column">
     <h1 class="ui header"><%= post.title %></h1>
+    <div class="piggy-metadata">
+      <span class="piggy-pv">阅读：<%= post.pv %></span>
+      <span>写于&nbsp;<%= new Date(post.createdAt).toLocaleString().slice(0, 10) %></span>
+    </div>
 
-    <p><%= post.content %></p>
+    <div><%- post.content %></div>
+    <div class="ui minimal comments">
+      <h3 class="ui dividing header">我要评论</h3>
+      <%
+        if(comments) {
+          comments.forEach((comment) => {
+      %>
+        <%- include('components/comment', {comment: comment}) %>
+      <%
+          })
+        }
+      %>
+      <form class="ui reply form" method="post">
+        <div class="field">
+          <textarea name="comment" required></textarea>
+        </div>
+        <input type="submit" class="ui teal submit button" value="发表">
+      </form>
+      <%- include('components/notification') %>
+    </div>
   </div>
 </div>
 <%- include('components/footer') %>

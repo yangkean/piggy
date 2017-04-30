@@ -1,7 +1,20 @@
 const Post = require('./db').Post;
 
+Post.hook('afterFind', function(post, options) {
+  // 用户查看一篇博客时增加其 pv
+  if(!Array.isArray(post) && post.postId) {
+    Post.update({
+      pv: post.pv + 1,
+    }, {
+      where: {
+        postId: post.postId,
+      },
+    })
+    .then(() => console.log('\x1b[34m%s\x1b[0m', 'pv is updated...'));
+  }
+});
+
 exports = module.exports = {
-  // 新建文章
   create(post) {
     return Post.sync()
             .then(
@@ -11,18 +24,26 @@ exports = module.exports = {
             );
   },
 
-  // 查找一篇文章
   findOne(postId) {
-    return Post.findOne({
-      where: {
-        postId: postId,
-      },
-    });
+    return Post.sync()
+            .then(
+              function() {
+                return Post.findOne({
+                  where: {
+                    postId: postId,
+                  },
+                });
+              }
+            );
   },
 
-  // 查找全部文章
   // @return {Array} an array of all instances
   findAll() {
-    return Post.findAll();
+    return Post.sync()
+            .then(
+              function() {
+                return Post.findAll();
+              }
+            );
   },
 };

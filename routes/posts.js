@@ -1,13 +1,21 @@
 const express = require('express');
 const sha256 = require("crypto-js/sha256");
+const marked = require('marked');
 const router = express.Router();
 const PostModel = require('../models/post');
+const CommentModel = require('../models/comment');
 const config = require('config-lite')(__dirname);
 
 router.get('/', (req, res) => {
   PostModel.findAll()
   .then(
     function(posts) {
+      if(posts.length > 0) {
+        posts.forEach((post) => {
+          post.content = marked(post.content);
+        });
+      }
+
       res.render('blogs', {posts: posts});
     }
   )
@@ -66,7 +74,51 @@ router.get('/:postId', (req, res, next) => {
         return res.redirect('/posts');
       }
 
-      res.render('post', {post: post});
+      post.content = marked(post.content);
+
+      CommentModel.findAll()
+      .then(
+        function(comments) {
+          res.render('post', {post: post, comments: comments});
+        }
+      );
+    }
+  )
+  .catch(next);
+});
+
+router.post('/:postId', (req, res, next) => {
+  const postId = req.params.postId;
+  const commentId = (Date.now()).toString();
+  const author = req.session.user.username;
+  const content = req.fields.comment;
+  const website = req.session.website;
+
+  try {
+    if(content.trim().length === 0) {
+      throw new Error('输入评论不能为空');
+    }
+  }
+  catch(e) {
+    req.flash('error', e.message);
+
+    return res.redirect('back');
+  };
+
+  const comment = {
+    commentId: commentId,
+    author: author,
+    postId: postId,
+    content: content,
+    website: website,
+  };
+
+  CommentModel.create(comment)
+  .then(
+    function() {
+      req.flash('success', '发表成功');
+
+      res.redirect('back');
     }
   )
   .catch(next);

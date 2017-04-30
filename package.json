@@ -31,6 +31,7 @@
     "express": "^4.15.2",
     "express-formidable": "^1.0.0",
     "express-session": "^1.15.2",
+    "marked": "^0.3.6",
     "mysql": "^2.13.0",
     "sequelize": "^3.30.4"
   }

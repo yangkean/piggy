@@ -22,5 +22,6 @@ exports = module.exports = {
       idle: 12000,
     },
     timezone: '+08:00',
+    charset: 'utf8mb4',
   },
 };

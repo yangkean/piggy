@@ -9,13 +9,15 @@ const sequelize = new Sequelize(config.mysql.database, config.mysql.username, co
     idle: config.mysql.pool.idle, // 连接被释放前的最大空闲时间 (ms)
   },
   timezone: config.mysql.timezone, // 时区
+  dialectOptions: { // 这里的选项将直接传给连接库
+    charset: config.mysql.charset,
+  },
 });
 
 // 定义用户信息模型
 const User = sequelize.define('user', {
   username: {
     type: Sequelize.STRING,
-    unique: true,
     primaryKey: true,
   },
   uid: {type: Sequelize.STRING},
@@ -30,7 +32,6 @@ const User = sequelize.define('user', {
 const Post = sequelize.define('post', {
   title: {
     type: Sequelize.STRING,
-    unique: true,
     primaryKey: true,
   },
   postId: {type: Sequelize.STRING},
@@ -41,6 +42,21 @@ const Post = sequelize.define('post', {
   freezeTableName: true,
 });
 
+// 定义评论信息
+const Comment = sequelize.define('comment', {
+  commentId: {
+    type: Sequelize.STRING,
+    primaryKey: true,
+  },
+  author: {type: Sequelize.STRING},
+  website: {type: Sequelize.STRING},
+  postId: {type: Sequelize.STRING},
+  content: {type: Sequelize.STRING},
+}, {
+  freezeTableName: true,
+});
+
 exports.dbConnection = sequelize;
 exports.User = User;
 exports.Post = Post;
+exports.Comment = Comment;

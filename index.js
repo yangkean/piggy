@@ -34,7 +34,7 @@ app.use(flash());
 
 // 处理表单提交
 app.use(formidable({
-  encoding: 'utf-8',
+  encoding: 'utf8mb4',
 }));
 
 // 设置模版全局变量

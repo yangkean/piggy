@@ -21,8 +21,8 @@ UserModel.findOne(config.site.owner)
         password: hash,
       };
       UserModel.create(user)
-      .then(() => console.log('Owner account is created...'))
-      .catch((err) => console.log(err));
+      .then(() => console.log('\x1b[34m%s\x1b[0m', 'Owner account is created...'))
+      .catch((err) => console.log('\x1b[31m%s\x1b[0m', err));
     }
   }
 );

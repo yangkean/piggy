@@ -13,20 +13,19 @@ router.post('/', (req, res, next) => {
 
   UserModel.findOne(username)
   .then(
-    function(result) {
-      if(!result) {
+    function(user) {
+      if(!user) {
         req.flash('error', '用户名或密码不正确'); // 实际为用户名不正确
 
         return res.redirect('/signin');
       }
 
-      const userObj = result.dataValues;
-      const isCorrect = bcrypt.compareSync(password, userObj.password);
+      const isCorrect = bcrypt.compareSync(password, user.password);
 
       if(isCorrect) {
-        delete userObj.password;
+        delete user.password;
 
-        req.session.user = userObj;
+        req.session.user = user;
 
         req.flash('success', '登录成功');
 
