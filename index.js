@@ -48,6 +48,7 @@ app.use((req, res, next) => {
   res.locals.success = req.flash('success').toString(); // `req.flash(key)`会返回一个 'key' 类型的包含通知信息的数组
   res.locals.error = req.flash('error').toString();
   res.locals.user = req.session.user; // 可以用 `req.session`访问 session 数据
+  res.locals.postId = null;
   next();
 });
 

@@ -15,7 +15,7 @@ UserModel.findOne(config.site.owner)
 
       const user = {
         username: config.site.owner,
-        uid: uid,
+        uid,
         website: '',
         email: '',
         password: hash,

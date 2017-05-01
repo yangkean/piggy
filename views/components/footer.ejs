@@ -1,6 +1,11 @@
   <script>
   $('.ui.dropdown').dropdown();
+  $('.piggy-reply').click(function() {
+    $(this).siblings('.ui.modal').modal('show');
+  });
+  <% if(postId) { %>
   hljs.initHighlightingOnLoad();
+  <% } %>
   </script>
 </body>
 </html>

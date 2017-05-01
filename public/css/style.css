@@ -14,3 +14,7 @@ body {
 .piggy-pv {
   margin-right: 10px;
 }
+.piggy-reply-box {
+  background-color: #eee;
+  padding: 10px;
+}

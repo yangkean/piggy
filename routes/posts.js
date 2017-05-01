@@ -43,11 +43,11 @@ router.post('/creation', (req, res, next) => {
     const commentsCount = 0;
 
     const post = {
-      title: title,
-      postId: postId,
-      content: content,
-      pv: pv,
-      commentsCount: commentsCount,
+      title,
+      postId,
+      content,
+      pv,
+      commentsCount,
     };
 
     PostModel.create(post)
@@ -74,9 +74,10 @@ router.get('/:postId', (req, res, next) => {
         return res.redirect('/posts');
       }
 
+      res.locals.postId = postId;
       post.content = marked(post.content);
 
-      CommentModel.findAll()
+      CommentModel.findAll(postId)
       .then(
         function(comments) {
           res.render('post', {post: post, comments: comments});
@@ -87,12 +88,13 @@ router.get('/:postId', (req, res, next) => {
   .catch(next);
 });
 
-router.post('/:postId', (req, res, next) => {
+router.post('/:postId/:repliedCommentId?', (req, res, next) => {
   const postId = req.params.postId;
   const commentId = (Date.now()).toString();
   const author = req.session.user.username;
   const content = req.fields.comment;
-  const website = req.session.website;
+  const website = req.session.user.website;
+  const repliedCommentId = req.params.repliedCommentId; // 被回复者的 commentId
 
   try {
     if(content.trim().length === 0) {
@@ -106,13 +108,36 @@ router.post('/:postId', (req, res, next) => {
   };
 
   const comment = {
-    commentId: commentId,
-    author: author,
-    postId: postId,
-    content: content,
-    website: website,
+    commentId,
+    author,
+    postId,
+    content,
+    website,
   };
 
+  if(repliedCommentId) {
+    return CommentModel.findOne(repliedCommentId)
+            .then(
+              function(repliedComment) {
+                comment.content = `<pre class="piggy-reply-box">${repliedComment.content}</pre>@${repliedComment.author}，${comment.content}`;
+
+                comment.content = marked(comment.content);
+
+                CommentModel.create(comment)
+                .then(
+                  function() {
+                    req.flash('success', '回复成功');
+
+                    res.redirect(`/posts/${postId}`);
+                  }
+                )
+                .catch(next);
+              }
+            )
+            .catch(next);
+  }
+
+  comment.content = marked(comment.content);
   CommentModel.create(comment)
   .then(
     function() {

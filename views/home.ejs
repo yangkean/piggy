@@ -2,7 +2,34 @@
 <%- include('components/nav') %>
 <div class="ui centered grid">
   <div class="ui raised segment ten wide column">
-    <h1 class="ui centered header">hello piggy!</h1>
+    <% if(home) { %>
+      <%- home.introduction %>
+      <% if(home.email) { %>
+        <a class="ui circular icon button" href="mailto:<%= home.email %>">
+          <i class="mail outline icon"></i>
+        </a>
+      <% } %>
+
+      <% if(home.github) { %>
+        <a class="ui circular icon button" href="<%= home.github %>" target="_blank">
+          <i class="github icon"></i>
+        </a>
+      <% } %>
+
+      <% if(home.weibo) { %>
+        <a class="ui circular icon button" href="<%= home.weibo %>" target="_blank">
+          <i class="weibo icon"></i>
+        </a>
+      <% } %>
+
+      <% if(home.twitter) { %>
+        <a class="ui circular icon button" href="<%= home.twitter %>" target="_blank">
+          <i class="twitter icon"></i>
+        </a>
+      <% } %>
+    <% } else { %>
+      <h1 class="ui centered header">hello piggy!</h1>
+    <% } %>
   </div>
 </div>
 <%- include('components/footer') %>

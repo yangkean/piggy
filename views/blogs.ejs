@@ -5,7 +5,7 @@
   if(posts) {
     posts.forEach((post) => {
   %>
-    <%- include('session', {post: post}) %>
+    <%- include('components/session', {post: post}) %>
   <%
     })
   }

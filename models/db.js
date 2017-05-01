@@ -56,7 +56,25 @@ const Comment = sequelize.define('comment', {
   freezeTableName: true,
 });
 
-exports.dbConnection = sequelize;
-exports.User = User;
-exports.Post = Post;
-exports.Comment = Comment;
+// 定义首页信息
+const Home = sequelize.define('home', {
+  owner: {
+    type: Sequelize.STRING,
+    primaryKey: true,
+  },
+  introduction: {type: Sequelize.TEXT},
+  email: {type: Sequelize.STRING},
+  github: {type: Sequelize.STRING},
+  weibo: {type: Sequelize.STRING},
+  twitter: {type: Sequelize.STRING},
+}, {
+  freezeTableName: true,
+});
+
+exports = module.exports = {
+  dbConnection: sequelize,
+  User,
+  Post,
+  Comment,
+  Home,
+};

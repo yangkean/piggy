@@ -10,11 +10,29 @@ exports = module.exports = {
             );
   },
 
-  findAll() {
+  findAll(postId) {
     return Comment.sync()
             .then(
               function() {
-                return Comment.findAll();
+                return Comment.findAll({
+                  where: {
+                    postId: postId,
+                  },
+                  order: [['commentId', 'DESC']],
+                });
+              }
+            );
+  },
+
+  findOne(commentId) {
+    return Comment.sync()
+            .then(
+              function() {
+                return Comment.findOne({
+                  where: {
+                    commentId: commentId,
+                  },
+                });
               }
             );
   },
