@@ -11,10 +11,23 @@ body {
   font-size: .9em;
   color: #bbb;
 }
+.piggy-session-date {
+  font-size: .6em;
+  color: #bbb;
+  margin-left: 15px;
+  font-weight: 500;
+  font-style: italic;
+}
 .piggy-pv {
   margin-right: 10px;
 }
 .piggy-reply-box {
   background-color: #eee;
   padding: 10px;
+}
+footer {
+  text-align: center;
+  line-height: 33px;
+  margin: 20px auto 10px;
+  font-size: .9em;
 }

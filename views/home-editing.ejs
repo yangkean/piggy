@@ -3,31 +3,45 @@
 <div class="ui centered grid">
   <div class="ui raised segment ten wide column">
     <%- include('components/notification') %>
-    <form class="ui form" method="post">
-      <div class="field">
-        <textarea name="introduction" placeholder="简介..." rows="30"required>
+    <div class="ui top attached tabular menu">
+      <a class="item active" data-tab="edit">
+        <i class="code icon"></i> 编辑
+      </a>
+      <a class="item piggy-preview" data-tab="preview">
+        <i class="unhide icon"></i> 预览
+      </a>
+    </div>
+    <div class="ui bottom attached tab segment active" data-tab="edit">
+      <form class="ui form" method="post">
+        <div class="field">
+          <textarea name="introduction" placeholder="简介..." rows="30" required>
+<%# 设置`<textarea>`的值用`innerHTML`，获取`<textarea>`的值用`value` %>
 <% if(home) { %><%= home.introduction %><% } %>
-        </textarea>
-      </div>
-      <h3>增加联系方式</h3>
-      <div class="inline field">
-        <i class="large mail outline icon"></i>
-        <input type="email" name="email" placeholder="邮箱(可选)" value="<% if(home) { %><%= home.email %><% } %>">
-      </div>
-      <div class="inline field">
-        <i class="large github icon"></i>
-        <input type="url" name="github" placeholder="github(可选)" value="<% if(home) { %><%= home.github %><% } %>">
-      </div>
-      <div class="inline field">
-        <i class="large weibo icon"></i>
-        <input type="url" name="weibo" placeholder="微博(可选)" value="<% if(home) { %><%= home.weibo %><% } %>">
-      </div>
-      <div class="inline field">
-        <i class="large twitter icon"></i>
-        <input type="url" name="twitter" placeholder="twitter(可选)" value="<% if(home) { %><%= home.twitter %><% } %>">
-      </div>
-      <input class="ui fluid teal button" type="submit" value="完成编辑">
-    </form>
+          </textarea>
+        </div>
+        <h3>增加联系方式</h3>
+        <div class="inline field">
+          <i class="large mail outline icon"></i>
+          <input type="email" name="email" placeholder="邮箱(可选)" value="<% if(home) { %><%= home.email %><% } %>">
+        </div>
+        <div class="inline field">
+          <i class="large github icon"></i>
+          <input type="url" name="github" placeholder="github(可选)" value="<% if(home) { %><%= home.github %><% } %>">
+        </div>
+        <div class="inline field">
+          <i class="large weibo icon"></i>
+          <input type="url" name="weibo" placeholder="微博(可选)" value="<% if(home) { %><%= home.weibo %><% } %>">
+        </div>
+        <div class="inline field">
+          <i class="large twitter icon"></i>
+          <input type="url" name="twitter" placeholder="twitter(可选)" value="<% if(home) { %><%= home.twitter %><% } %>">
+        </div>
+        <input class="ui fluid teal button" type="submit" value="完成编辑">
+      </form>
+    </div>
+    <div class="ui bottom attached tab segment" data-tab="preview">
+      <div id="piggy-preview"></div>
+    </div>
   </div>
 </div>
 <%- include('components/footer') %>

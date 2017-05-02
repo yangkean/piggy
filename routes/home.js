@@ -24,7 +24,7 @@ router.get('/editing', (req, res, next) => {
   const user = req.session.user;
   const owner = config.site.owner;
 
-  if(user && user.username === config.site.owner) {
+  if(user && user.username === owner) {
     HomeModel.get(owner)
     .then(
       function(home) {

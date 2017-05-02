@@ -16,7 +16,7 @@
       <div class="ui small modal">
         <div class="ui header">
           <h4>回复 @<%= comment.author %></h4>
-          <p><%= comment.content %></p>
+          <p><%- comment.content %></p>
         </div>
         <div class="content">
           <form class="ui form" method="post" action="/posts/<%= comment.postId %>/<%= comment.commentId %>">

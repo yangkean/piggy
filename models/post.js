@@ -24,6 +24,22 @@ exports = module.exports = {
             );
   },
 
+  update(updatedPost) {
+    return Post.sync()
+            .then(
+              function() {
+                return Post.update({
+                  title: updatedPost.title,
+                  content: updatedPost.content,
+                }, {
+                  where: {
+                    postId: updatedPost.postId,
+                  },
+                });
+              }
+            );
+  },
+
   findOne(postId) {
     return Post.sync()
             .then(
@@ -42,7 +58,9 @@ exports = module.exports = {
     return Post.sync()
             .then(
               function() {
-                return Post.findAll();
+                return Post.findAll({
+                  order: [['createdAt', 'DESC']],
+                });
               }
             );
   },

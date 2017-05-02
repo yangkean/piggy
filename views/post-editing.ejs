@@ -1,0 +1,33 @@
+<%- include('components/header') %>
+<%- include('components/nav') %>
+<div class="ui centered grid">
+  <div class="ui raised segment ten wide column">
+    <%- include('components/notification') %>
+    <div class="ui top attached tabular menu">
+      <a class="item active" data-tab="edit">
+        <i class="code icon"></i> 编辑
+      </a>
+      <a class="item piggy-preview" data-tab="preview">
+        <i class="unhide icon"></i> 预览
+      </a>
+    </div>
+    <div class="ui bottom attached tab segment active" data-tab="edit">
+      <form class="ui form" method="post">
+        <div class="field">
+          <input type="text" name="title" placeholder="标题" value="<%= post.title %>" required>
+        </div>
+        <div class="field">
+          <textarea name="content" placeholder="内容..." rows="30" required>
+<%# 设置`<textarea>`的值用`innerHTML`，获取`<textarea>`的值用`value` %>
+<% if(post) { %><%= post.content %><% } %>
+          </textarea>
+        </div>
+        <input class="ui fluid teal button" type="submit" value="完成编辑">
+      </form>
+    </div>
+    <div class="ui bottom attached tab segment" data-tab="preview">
+      <div id="piggy-preview"></div>
+    </div>
+  </div>
+</div>
+<%- include('components/footer') %>

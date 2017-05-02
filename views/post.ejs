@@ -2,6 +2,9 @@
 <%- include('components/nav') %>
 <div class="ui centered grid">
   <div class="ui raised segment ten wide column">
+    <% if(user && user.username === site.owner) { %>
+      <a class="ui right floated blue button" href="/posts/<%= post.postId %>/editing">编辑</a>
+    <% } %>
     <h1 class="ui header"><%= post.title %></h1>
     <div class="piggy-metadata">
       <span class="piggy-pv">阅读：<%= post.pv %></span>
@@ -10,7 +13,7 @@
 
     <div><%- post.content %></div>
     <div class="ui minimal comments">
-      <h3 class="ui dividing header">我要评论</h3>
+      <h3 class="ui dividing header">我要评论 (共有评论 <%= post.commentsCount %> 条)</h3>
       <%
         if(comments) {
           comments.forEach((comment) => {

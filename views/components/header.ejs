@@ -5,9 +5,12 @@
   <title><%= site.title %></title>
   <link href="//cdn.bootcss.com/semantic-ui/2.2.10/semantic.min.css" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
-  <% if(postId) { %>
+  <% if(postId || /\/posts\/[0-9a-f]{64}\/editing/.test(path)) { %>
   <link href="//cdn.bootcss.com/highlight.js/9.11.0/styles/monokai-sublime.min.css" rel="stylesheet">
   <script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+  <% } %>
+  <% if(path === '/home/editing' || /\/posts\/[0-9a-f]{64}\/editing/.test(path)) { %>
+  <script src="//cdn.bootcss.com/marked/0.3.6/marked.min.js"></script>
   <% } %>
   <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
   <script src="//cdn.bootcss.com/semantic-ui/2.2.10/semantic.min.js"></script>

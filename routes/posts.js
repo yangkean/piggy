@@ -88,6 +88,52 @@ router.get('/:postId', (req, res, next) => {
   .catch(next);
 });
 
+router.get('/:postId/editing', (req, res, next) => {
+  const user = req.session.user;
+  const owner = config.site.owner;
+  const postId = req.params.postId;
+
+  if(user && user.username === owner) {
+    PostModel.findOne(postId)
+    .then(
+      function(post) {
+        res.render('post-editing', {post: post});
+      }
+    )
+    .catch(next);
+  }
+  else {
+    res.send('404 Not Found');
+  }
+});
+
+router.post('/:postId/editing', (req, res, next) => {
+  const user = req.session.user;
+  const owner = config.site.owner;
+
+  if(user && user.username === owner) {
+    const title = req.fields.title;
+    const content = req.fields.content;
+    const postId = req.params.postId;
+
+    const updatePost = {
+      title,
+      postId,
+      content,
+    };
+
+    PostModel.update(updatePost)
+    .then(
+      function() {
+        req.flash('success', '编辑成功');
+
+        res.redirect(`/posts/${postId}`);
+      }
+    )
+    .catch(next);
+  }
+});
+
 router.post('/:postId/:repliedCommentId?', (req, res, next) => {
   const postId = req.params.postId;
   const commentId = (Date.now()).toString();
