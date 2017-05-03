@@ -6,6 +6,23 @@ const PostModel = require('../models/post');
 const CommentModel = require('../models/comment');
 const config = require('config-lite')(__dirname);
 
+// 增加 `TODO lists` 功能
+const renderer = new marked.Renderer();
+renderer.listitem = function(text) {
+  if (/^\s*\[[x ]\]\s*/.test(text)) {
+    text = text
+            .replace(/^\s*\[ \]\s*/, '<i class="square outline icon"></i> ')
+            .replace(/^\s*\[x\]\s*/, '<i class="checkmark box icon"></i> ');
+            return '<li style="list-style: none;">' + text + '</li>';
+  }
+  else {
+    return '<li>' + text + '</li>';
+  }
+};
+marked.setOptions({
+  renderer: renderer,
+});
+
 router.get('/', (req, res) => {
   PostModel.findAll()
   .then(

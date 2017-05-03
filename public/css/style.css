@@ -4,6 +4,30 @@ body {
   font-size: 16px;
   height: auto;
 }
+table {
+  margin: 16px;
+}
+table tr:nth-child(2n) {
+  background-color: #f6f8fa;
+}
+table th, td {
+   padding: 6px 13px;
+   border: 1px solid #dfe2e5;
+}
+blockquote {
+  padding: 0 1em;
+  color: #6a737d;
+  border-left: 0.25em solid #dfe2e5;
+  margin-left: 20px;
+}
+code {
+  background-color: #eee;
+  border-radius: 3px;
+  padding: .2em;
+}
+.grid img {
+  width: 100%;
+}
 .piggy-session {
   margin-bottom: 20px;
 }

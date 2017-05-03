@@ -8,7 +8,7 @@
     <h1 class="ui header"><%= post.title %></h1>
     <div class="piggy-metadata">
       <span class="piggy-pv">阅读：<%= post.pv %></span>
-      <span>写于&nbsp;<%= new Date(post.createdAt).toLocaleString().slice(0, 10) %></span>
+      <span>写于&nbsp;<%= new Date(post.createdAt).toLocaleString().match(/[0-9-]+/)[0] %></span>
     </div>
 
     <div><%- post.content %></div>
