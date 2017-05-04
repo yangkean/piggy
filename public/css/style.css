@@ -49,6 +49,22 @@ code {
   background-color: #eee;
   padding: 10px;
 }
+.piggy-return-top {
+  position: fixed;
+  right: 30px;
+  bottom: 40px;
+  padding: 15px 0 15px 4px;
+  border: 1px solid #a4c6ff;
+  color: #777;
+  cursor: pointer;
+  border-radius: 5px;
+  opacity: .4;
+  visibility: hidden;
+  transition: transform .5s linear;
+}
+.piggy-return-top:hover {
+  opacity: 1;
+}
 footer {
   text-align: center;
   line-height: 33px;

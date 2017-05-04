@@ -1,6 +1,20 @@
+  <div class="piggy-return-top">
+    <i class="angle double up large icon"></i>
+  </div>
   <footer>Copyright &copy; <%= new Date().getFullYear() %> <%= site.owner %></footer>
   <script>
   $('.ui.dropdown').dropdown();
+
+  const returnTop = document.querySelector('.piggy-return-top');
+  window.onscroll = () => {
+    if(window.pageYOffset > window.innerHeight) {
+      returnTop.style.visibility = 'visible';
+    }
+    else {
+      returnTop.style.visibility = 'hidden';
+    }
+  };
+  returnTop.onclick = () => $('body').animate({scrollTop: 0}, 'slow');
 
   <%# 主页编辑 %>
   <% if(path === '/home/editing') { %>
