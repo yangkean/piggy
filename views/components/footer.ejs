@@ -45,10 +45,19 @@
 
   document.querySelector('a[class="item piggy-preview"]').onclick = function() {
     const title = document.querySelector('input[name="title"]').value;
+    const tagStr = document.querySelector('input[name="tag"]').value.trim();
     const postContent = marked(document.querySelector('textarea[name="content"]').value);
 
     const titleInfo = `<h1 class="ui header">${title}</h1>`;
-    document.querySelector('#piggy-preview').innerHTML = `${titleInfo}${postContent}`;
+
+    let tagBar = '';
+    if(tagStr) {
+      tagStr.split(' ').forEach((singleTag) => {
+        tagBar += `<a class="ui mini label">${singleTag}</a>`;
+      });
+    }
+    const tag = `<div class="piggy-tag-bar">${tagBar}</div>`;
+    document.querySelector('#piggy-preview').innerHTML = `${titleInfo}${tag}${postContent}`;
 
     $('pre code').each(function(i, block) {
       hljs.highlightBlock(block);

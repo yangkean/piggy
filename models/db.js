@@ -38,6 +38,7 @@ const Post = sequelize.define('post', {
   content: {type: Sequelize.TEXT},
   pv: {type: Sequelize.DECIMAL},
   commentsCount: {type: Sequelize.DECIMAL},
+  tag: {type: Sequelize.STRING},
 }, {
   freezeTableName: true,
 });

@@ -34,6 +34,7 @@ code {
 .piggy-metadata {
   font-size: .9em;
   color: #bbb;
+  margin-top: 10px;
 }
 .piggy-session-date {
   font-size: .6em;
@@ -41,6 +42,21 @@ code {
   margin-left: 15px;
   font-weight: 500;
   font-style: italic;
+}
+.piggy-sidebar {
+  width: 15.9375%;
+  position: fixed !important;
+  top: 100px;
+  right: 0px;
+  text-align: left;
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+}
+.piggy-sidebar h3 {
+  margin: 10px 0;
+}
+.piggy-sidebar a {
+  margin-bottom: 5px !important;
 }
 .piggy-pv {
   margin-right: 10px;

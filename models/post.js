@@ -31,6 +31,7 @@ exports = module.exports = {
                 return Post.update({
                   title: updatedPost.title,
                   content: updatedPost.content,
+                  tag: updatedPost.tag,
                 }, {
                   where: {
                     postId: updatedPost.postId,

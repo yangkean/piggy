@@ -54,6 +54,7 @@ router.post('/creation', (req, res, next) => {
 
   if(user && user.username === config.site.owner) {
     const title = req.fields.title;
+    const tag = req.fields.tag.trim();
     const postId = sha256(title).toString();
     const content = req.fields.content;
     const pv = 0;
@@ -61,6 +62,7 @@ router.post('/creation', (req, res, next) => {
 
     const post = {
       title,
+      tag,
       postId,
       content,
       pv,
@@ -131,12 +133,14 @@ router.post('/:postId/editing', (req, res, next) => {
   if(user && user.username === owner) {
     const title = req.fields.title;
     const content = req.fields.content;
+    const tag = req.fields.tag;
     const postId = req.params.postId;
 
     const updatePost = {
       title,
       postId,
       content,
+      tag,
     };
 
     PostModel.update(updatePost)
