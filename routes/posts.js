@@ -3,6 +3,7 @@ const sha256 = require("crypto-js/sha256");
 const marked = require('marked');
 const router = express.Router();
 const PostModel = require('../models/post');
+const InfoModel = require('../models/info');
 const CommentModel = require('../models/comment');
 const config = require('config-lite')(__dirname);
 
@@ -69,7 +70,37 @@ router.post('/creation', (req, res, next) => {
       commentsCount,
     };
 
+    const info = {
+      name: 'tags',
+      content: '',
+    };
+
     PostModel.create(post)
+    .then(
+      function() {
+        InfoModel.findOne(info.name)
+        .then(
+          function(item) {
+            if(!item) {
+              info.content = tag;
+
+              InfoModel.create(info);
+
+              return;
+            }
+
+            const contentSet = new Set(item.content && item.content.split(' '));
+
+            for(newTag of tag.split(' ')) {
+              contentSet.add(newTag);
+            }
+
+            info.content = Array.from(contentSet).join(' ');
+            InfoModel.update(info);
+          }
+        );
+      }
+    )
     .then(
       function() {
         req.flash('success', '发布成功');
@@ -79,6 +110,23 @@ router.post('/creation', (req, res, next) => {
     )
     .catch(next);
   }
+});
+
+router.get('/tags/:tag?', (req, res, next) => {
+  const tag = req.params.tag;
+
+  PostModel.findAll(tag)
+  .then(
+    function(posts) {
+      if(posts.length > 0) {
+        posts.forEach((post) => {
+          post.content = marked(post.content);
+        });
+      }
+
+      res.render('blogs', {posts: posts});
+    }
+  );
 });
 
 router.get('/:postId', (req, res, next) => {
@@ -99,7 +147,12 @@ router.get('/:postId', (req, res, next) => {
       CommentModel.findAll(postId)
       .then(
         function(comments) {
-          res.render('post', {post: post, comments: comments});
+          InfoModel.findOne('tags')
+          .then(
+            function(tag) {
+              res.render('post', {post: post, comments: comments, tags: tag.content.split(' ')});
+            }
+          );
         }
       );
     }
@@ -133,7 +186,7 @@ router.post('/:postId/editing', (req, res, next) => {
   if(user && user.username === owner) {
     const title = req.fields.title;
     const content = req.fields.content;
-    const tag = req.fields.tag;
+    const tag = req.fields.tag.trim();
     const postId = req.params.postId;
 
     const updatePost = {
@@ -143,7 +196,29 @@ router.post('/:postId/editing', (req, res, next) => {
       tag,
     };
 
+    const info = {
+      name: 'tags',
+      content: '',
+    };
+
     PostModel.update(updatePost)
+    .then(
+      function() {
+        InfoModel.findOne(info.name)
+        .then(
+          function(item) {
+            const contentSet = new Set(item.content && item.content.split(' '));
+
+            for(newTag of tag.split(' ')) {
+              contentSet.add(newTag);
+            }
+
+            info.content = Array.from(contentSet).join(' ');
+            InfoModel.update(info);
+          }
+        );
+      }
+    )
     .then(
       function() {
         req.flash('success', '编辑成功');

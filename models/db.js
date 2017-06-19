@@ -72,10 +72,22 @@ const Home = sequelize.define('home', {
   freezeTableName: true,
 });
 
+// 定义杂碎的信息条目
+const Info = sequelize.define('info', {
+  name: {
+    type: Sequelize.STRING,
+    primaryKey: true,
+  },
+  content: {type: Sequelize.STRING},
+}, {
+  freezeTableName: true,
+});
+
 exports = module.exports = {
   dbConnection: sequelize,
   User,
   Post,
   Comment,
   Home,
+  Info,
 };

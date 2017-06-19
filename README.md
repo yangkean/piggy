@@ -2,7 +2,7 @@
 a simple blog framework, powered by Express.js
 
 ## TODO
-- [ ] tag
+- [x] tag
 - [ ] pagination
 - [ ] security
 - [ ] backup

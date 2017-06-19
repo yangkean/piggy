@@ -54,13 +54,19 @@ exports = module.exports = {
             );
   },
 
+  // @param {String} [tag] - a tag for searching articles
   // @return {Array} an array of all instances
-  findAll() {
+  findAll(tag = '') {
     return Post.sync()
             .then(
               function() {
                 return Post.findAll({
                   order: [['createdAt', 'DESC']],
+                  where: {
+                    tag: {
+                      $like: `%${tag}%`,
+                    },
+                  },
                 });
               }
             );

@@ -10,7 +10,7 @@
       <%
         if(post.tag.trim()) {
           post.tag.trim().split(' ').forEach((singleTag) => { %>
-        <a class="ui mini label"><%= singleTag %></a>
+        <a class="ui mini label" href="/posts/tags/<%= singleTag %>"><%= singleTag %></a>
       <% })} %>
     </div>
     <div class="piggy-metadata">
@@ -42,13 +42,9 @@
   <div class="ui raised three wide segment piggy-sidebar">
     <h3>标签呀!</h3>
     <div class="piggy-tag-sidebar">
-      <a class="ui mini label">hello</a>
-      <a class="ui mini label">hello</a>
-      <a class="ui mini label">hellojjjdss</a>
-      <a class="ui mini label">hello</a>
-      <a class="ui mini label">hello</a>
-      <a class="ui mini label">web语义</a>
-      <a class="ui mini label">hello</a>
+      <% for(let singleTag of tags) { %>
+        <a class="ui mini label" href="/posts/tags/<%= singleTag %>"><%= singleTag %></a>
+      <% } %>
     </div>
   </div>
 </div>
