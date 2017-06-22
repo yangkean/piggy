@@ -16,6 +16,32 @@
   };
   returnTop.onclick = () => $('body').animate({scrollTop: 0}, 'slow');
 
+  <% if(/\/posts$/.test(path)) { %>
+  document.querySelector('.piggy-pagination').innerHTML = showPagination(<%= index %>, <%= total %>);
+
+  const total = <%= total %>;
+  const lastPage = document.querySelector('.piggy-last-page');
+  const nextPage = document.querySelector('.piggy-next-page');
+  const page = Number.parseInt(document.querySelector('.piggy-pagination .piggy-index').innerHTML);
+
+  lastPage.onclick = () => location.href = `${location.origin}/posts?page=${page - 1}`;
+  nextPage.onclick = () => location.href = `${location.origin}/posts?page=${page + 1}`;
+
+  if(page === 1) {
+    lastPage.classList.add('disabled');
+  }
+  else if(lastPage.classList.contains('disabled')) {
+    lastPage.classList.remove('disabled');
+  }
+
+  if(page === total) {
+    nextPage.classList.add('disabled');
+  }
+  else if(nextPage.classList.contains('disabled')) {
+    nextPage.classList.remove('disabled');
+  }
+  <% } %>
+
   <%# 主页编辑 %>
   <% if(path === '/home/editing') { %>
   $('.menu .item').tab();

@@ -25,7 +25,11 @@ marked.setOptions({
 });
 
 router.get('/', (req, res) => {
-  PostModel.findAll()
+  const index = req.query.page || 1;
+  const limit = 5;
+  const offset = limit * (index - 1);
+
+  PostModel.findAll({offset, limit})
   .then(
     function(posts) {
       if(posts.length > 0) {
@@ -34,7 +38,12 @@ router.get('/', (req, res) => {
         });
       }
 
-      res.render('blogs', {posts: posts});
+      PostModel.count()
+      .then(
+        function(total) {
+          res.render('blogs', {posts: posts, index: index, total: Math.ceil(total / limit)});
+        }
+      );
     }
   )
 });
@@ -115,7 +124,7 @@ router.post('/creation', (req, res, next) => {
 router.get('/tags/:tag?', (req, res, next) => {
   const tag = req.params.tag;
 
-  PostModel.findAll(tag)
+  PostModel.findAll({tag})
   .then(
     function(posts) {
       if(posts.length > 0) {

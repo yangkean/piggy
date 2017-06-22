@@ -1,6 +1,6 @@
 <%- include('components/header') %>
 <%- include('components/nav') %>
-<div class="ui centered grid">
+<div class="ui centered grid piggy-blog-list">
   <%
   if(posts) {
     posts.forEach((post) => {
@@ -11,4 +11,5 @@
   }
   %>
 </div>
-<%- include('components/footer') %>
+<div class="piggy-pagination"></div>
+<%- include('components/footer', {index: index, total: total}) %>
