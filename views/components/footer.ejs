@@ -16,6 +16,7 @@
   };
   returnTop.onclick = () => $('body').animate({scrollTop: 0}, 'slow');
 
+  <%# 上下页跳转 %>
   <% if(/\/posts$/.test(path)) { %>
   document.querySelector('.piggy-pagination').innerHTML = showPagination(<%= index %>, <%= total %>);
 
@@ -47,11 +48,17 @@
   $('.menu .item').tab();
 
   document.querySelector('a[class="item piggy-preview"]').onclick = function() {
-    const introduction = marked(document.querySelector('textarea[name="introduction"]').value);
-    const email = document.querySelector('input[name="email"]').value;
-    const github = document.querySelector('input[name="github"]').value;
-    const weibo = document.querySelector('input[name="weibo"]').value;
-    const twitter = document.querySelector('input[name="twitter"]').value;
+    const escapeIntro = document.querySelector('textarea[name="introduction"]').value.trim()
+                        .replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;")
+                        .replace(/'/g, "&#39;")
+                        .replace(/"/g, "&quot;");
+    const introduction = marked(escapeIntro);
+    const email = document.querySelector('input[name="email"]').value.trim();
+    const github = document.querySelector('input[name="github"]').value.trim();
+    const weibo = document.querySelector('input[name="weibo"]').value.trim();
+    const twitter = document.querySelector('input[name="twitter"]').value.trim();
 
     const emailInfo = email ? `<a class="ui circular icon button" href="mailto:${email}"><i class="mail outline icon"></i></a>` : '';
     const githubInfo = github ? `<a class="ui circular icon button" href="${github}" target="_blank"><i class="github icon"></i></a>` : '';
@@ -70,9 +77,15 @@
   $('.menu .item').tab();
 
   document.querySelector('a[class="item piggy-preview"]').onclick = function() {
-    const title = document.querySelector('input[name="title"]').value;
+    const title = document.querySelector('input[name="title"]').value.trim();
     const tagStr = document.querySelector('input[name="tag"]').value.trim();
-    const postContent = marked(document.querySelector('textarea[name="content"]').value);
+    const escapePost = document.querySelector('textarea[name="content"]').value.trim()
+                        .replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;")
+                        .replace(/'/g, "&#39;")
+                        .replace(/"/g, "&quot;");
+    const postContent = marked(escapePost);
 
     const titleInfo = `<h1 class="ui header">${title}</h1>`;
 

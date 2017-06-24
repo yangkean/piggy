@@ -1,5 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcryptjs'); // 用于密码加密的中间件
+const escape = require('html-escaper').escape;
 const UserModel = require('../models/user');
 const router = express.Router();
 
@@ -8,7 +9,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res, next) => {
-  const username = req.fields.username;
+  const username = escape(req.fields.username.trim());
   const password = req.fields.password;
 
   UserModel.findOne(username)

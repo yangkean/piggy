@@ -1,6 +1,7 @@
 const express = require('express');
 const sha256 = require("crypto-js/sha256"); // 普通加密
 const bcrypt = require('bcryptjs'); // 更强大的加密中间件
+const escape = require('html-escaper').escape; // 字符转义
 const config = require('config-lite')(__dirname);
 const router = express.Router();
 const UserModel = require('../models/user');
@@ -32,11 +33,11 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res, next) => {
-  const username = req.fields.username;
-  const website = req.fields.webiste || '';
-  const email = req.fields.email;
-  const password = req.fields.password;
-  const repassword = req.fields.repassword;
+  const username = req.fields.username.trim();
+  const website = req.fields.webiste.trim() || '';
+  const email = req.fields.email.trim();
+  const password = req.fields.password.trim();
+  const repassword = req.fields.repassword.trim();
 
   try {
     if(username.length < 3 || username.length >10) {
@@ -61,9 +62,9 @@ router.post('/', (req, res, next) => {
   const hash = bcrypt.hashSync(password);
 
   const user = {
-    username: req.fields.username,
+    username: escape(req.fields.username),
     uid: uid,
-    website: req.fields.website || '',
+    website: encodeURI(req.fields.website || ''),
     email: req.fields.email,
     password: hash,
   };

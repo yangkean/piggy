@@ -2,7 +2,7 @@ const Post = require('./db').Post;
 
 Post.hook('afterFind', function(post, options) {
   // 用户查看一篇博客时增加其 pv
-  if(!Array.isArray(post) && post.postId) {
+  if(!Array.isArray(post) && post && post.postId) {
     Post.update({
       pv: post.pv + 1,
     }, {

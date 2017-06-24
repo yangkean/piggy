@@ -1,6 +1,7 @@
 const express = require('express');
 const sha256 = require("crypto-js/sha256");
 const marked = require('marked');
+const html = require('html-escaper');
 const router = express.Router();
 const PostModel = require('../models/post');
 const InfoModel = require('../models/info');
@@ -24,9 +25,21 @@ marked.setOptions({
   renderer: renderer,
 });
 
-router.get('/', (req, res) => {
-  const index = req.query.page || 1;
-  const limit = 5;
+const limit = 5; // 每页限制文章数
+let total; // 存储总页数
+PostModel.count()
+.then(
+  function(totalItem) {
+    total = Math.ceil(totalItem / limit);
+  }
+);
+
+router.get('/', (req, res, next) => {
+  let index = Number.parseInt(req.query.page) || 1;
+
+  if(index > total) index = total;
+  if(index < 1) index = 1;
+
   const offset = limit * (index - 1);
 
   PostModel.findAll({offset, limit})
@@ -38,14 +51,10 @@ router.get('/', (req, res) => {
         });
       }
 
-      PostModel.count()
-      .then(
-        function(total) {
-          res.render('blogs', {posts: posts, index: index, total: Math.ceil(total / limit)});
-        }
-      );
+      res.render('blogs', {posts: posts, index: index, total: total});
     }
   )
+  .catch(next);
 });
 
 router.get('/creation', (req, res) => {
@@ -63,10 +72,10 @@ router.post('/creation', (req, res, next) => {
   const user = req.session.user;
 
   if(user && user.username === config.site.owner) {
-    const title = req.fields.title;
+    const title = html.escape(req.fields.title.trim());
     const tag = req.fields.tag.trim();
     const postId = sha256(title).toString();
-    const content = req.fields.content;
+    const content = html.escape(req.fields.content.trim());
     const pv = 0;
     const commentsCount = 0;
 
@@ -135,7 +144,8 @@ router.get('/tags/:tag?', (req, res, next) => {
 
       res.render('blogs', {posts: posts});
     }
-  );
+  )
+  .catch(next);
 });
 
 router.get('/:postId', (req, res, next) => {
@@ -158,8 +168,8 @@ router.get('/:postId', (req, res, next) => {
         function(comments) {
           InfoModel.findOne('tags')
           .then(
-            function(tag) {
-              res.render('post', {post: post, comments: comments, tags: tag.content.split(' ')});
+            function(tags) {
+              res.render('post', {post: post, comments: comments, tags: tags.content.split(' ')});
             }
           );
         }
@@ -178,6 +188,9 @@ router.get('/:postId/editing', (req, res, next) => {
     PostModel.findOne(postId)
     .then(
       function(post) {
+        post.title = html.unescape(post.title);
+        post.content = html.unescape(post.content);
+
         res.render('post-editing', {post: post});
       }
     )
@@ -193,8 +206,8 @@ router.post('/:postId/editing', (req, res, next) => {
   const owner = config.site.owner;
 
   if(user && user.username === owner) {
-    const title = req.fields.title;
-    const content = req.fields.content;
+    const title = html.escape(req.fields.title.trim());
+    const content = html.escape(req.fields.content.trim());
     const tag = req.fields.tag.trim();
     const postId = req.params.postId;
 
@@ -243,12 +256,12 @@ router.post('/:postId/:repliedCommentId?', (req, res, next) => {
   const postId = req.params.postId;
   const commentId = (Date.now()).toString();
   const author = req.session.user.username;
-  const content = req.fields.comment;
+  const content = html.escape(req.fields.comment.trim());
   const website = req.session.user.website;
   const repliedCommentId = req.params.repliedCommentId; // 被回复者的 commentId
 
   try {
-    if(content.trim().length === 0) {
+    if(content.length === 0) {
       throw new Error('输入评论不能为空');
     }
   }
@@ -267,6 +280,7 @@ router.post('/:postId/:repliedCommentId?', (req, res, next) => {
   };
 
   if(repliedCommentId) {
+    // 回复他人评论
     return CommentModel.findOne(repliedCommentId)
             .then(
               function(repliedComment) {
@@ -281,8 +295,7 @@ router.post('/:postId/:repliedCommentId?', (req, res, next) => {
 
                     res.redirect(`/posts/${postId}`);
                   }
-                )
-                .catch(next);
+                );
               }
             )
             .catch(next);

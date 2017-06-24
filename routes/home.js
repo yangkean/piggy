@@ -1,5 +1,6 @@
 const express = require('express');
 const marked = require('marked');
+const html = require('html-escaper');
 const router = express.Router();
 const config = require('config-lite')(__dirname);
 const HomeModel = require('../models/home');
@@ -28,6 +29,8 @@ router.get('/editing', (req, res, next) => {
     HomeModel.get(owner)
     .then(
       function(home) {
+
+        home.introduction = html.unescape(home.introduction);
         res.render('home-editing', {home: home});
       }
     )
@@ -40,11 +43,11 @@ router.get('/editing', (req, res, next) => {
 
 router.post('/editing', (req, res, next) => {
   const owner = config.site.owner;
-  const introduction = req.fields.introduction;
-  const email = req.fields.email || '';
-  const github = req.fields.github || '';
-  const weibo = req.fields.weibo || '';
-  const twitter = req.fields.twitter || '';
+  const introduction = html.escape(req.fields.introduction.trim());
+  const email = req.fields.email.trim() || '';
+  const github = req.fields.github.trim() || '';
+  const weibo = req.fields.weibo.trim() || '';
+  const twitter = req.fields.twitter.trim() || '';
 
   const home = {
     owner,

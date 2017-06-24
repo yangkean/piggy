@@ -6,6 +6,7 @@ const flash = require('connect-flash'); // 显示通知的中间件
 const config = require('config-lite')(__dirname); // 读取配置文件的中间件
 const Sequelize = require('sequelize'); // MySQL ORM 中间件
 const SequelizeStore = require('connect-session-sequelize')(session.Store); // 将 session 保存到数据库的中间件
+const helmet = require('helmet'); // 通过适当地设置http头来防范一些著名网络攻击的中间件
 const app = express();
 const routes = require('./routes');
 const sequelize = require('./models/db').dbConnection;
@@ -20,6 +21,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+app.use(helmet());
+
 app.use(session({
   name: config.session.name, // `session ID` cookie 的名字
   secret: config.session.secret, // 必需，用来给 `session ID` cookie 签名
@@ -27,10 +30,12 @@ app.use(session({
     maxAge: config.session.maxAge, // 用来结合当前服务器时间计算 session 过期时间的最大毫秒数
   },
   store: sequelizeStore,
+  resave: true, // 每次请求都重新保存 session（已存在），不管 session 是否被修改
+  saveUninitialized: false, // 只在新的默认 session 被修改时才保存新 session，避免保存过多无意义的 session
 }));
 sequelizeStore.sync(); // 采用默认的 Session 模型用于数据库连接
 
-app.use(flash());
+app.use(flash()); // 注意 `connect-flash` 中间件会在初始化时修改 session（增加 `flash` 属性并赋值为 `{}`），导致保存了无意义的 session
 
 // 处理表单提交
 app.use(formidable({
