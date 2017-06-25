@@ -61,6 +61,13 @@ app.use((req, res, next) => {
 // 绑定路由
 routes(app);
 
+// 错误处理
+app.use((err, req, res, next) => {
+  console.error('\x1b[31m%s\x1b[0m', err.stack);
+
+  res.status(500).send('Something broke!');
+});
+
 app.listen(config.port, () => {
   console.log(`Server is listening on http://localhost:${config.port}`);
 });
