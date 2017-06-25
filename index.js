@@ -7,8 +7,10 @@ const config = require('config-lite')(__dirname); // 读取配置文件的中间
 const Sequelize = require('sequelize'); // MySQL ORM 中间件
 const SequelizeStore = require('connect-session-sequelize')(session.Store); // 将 session 保存到数据库的中间件
 const helmet = require('helmet'); // 通过适当地设置http头来防范一些著名网络攻击的中间件
+const schedule = require('node-schedule'); // 定时任务
 const app = express();
 const routes = require('./routes');
+const backup = require('./backup');
 const sequelize = require('./models/db').dbConnection;
 const sequelizeStore = new SequelizeStore({
   db: sequelize,
@@ -67,6 +69,9 @@ app.use((err, req, res, next) => {
 
   res.status(500).send('Something broke!');
 });
+
+// 数据库备份
+schedule.scheduleJob({hour: 1, minute: 0}, backup);
 
 app.listen(config.port, () => {
   console.log(`Server is listening on http://localhost:${config.port}`);

@@ -5,5 +5,5 @@ a simple blog framework, powered by Express.js
 - [x] tag
 - [x] pagination
 - [x] security
-- [ ] backup
+- [x] backup
 - [ ] search
