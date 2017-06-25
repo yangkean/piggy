@@ -46,6 +46,7 @@ app.use(formidable({
 
 // 设置模版全局变量
 app.locals.site = {
+  domain: config.site.domainName, // 网站主域名
   title: config.site.title, // 网站名字
   owner: config.site.owner, // 网站拥有者
 };

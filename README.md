@@ -6,4 +6,4 @@ a simple blog framework, powered by Express.js
 - [x] pagination
 - [x] security
 - [x] backup
-- [ ] search
+- [x] search

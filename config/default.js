@@ -1,6 +1,7 @@
 exports = module.exports = {
   site: {
     title: 'piggy',
+    domainName: 'yangkean.com',
     owner: 'Sam Yang',
     password: 'sam',
   },
