@@ -1,8 +1,6 @@
 # piggy
 a simple blog framework, powered by Express.js
 
-![screenshot](./screenshot.png)
-
 ## Environment
 
 NodeJS: 7.4.0
