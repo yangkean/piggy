@@ -10,7 +10,9 @@ Post.hook('afterFind', function(post, options) {
         postId: post.postId,
       },
     })
-    .then(() => console.log('\x1b[34m%s\x1b[0m', 'pv is updated...'));
+    .then(() => {
+      // console.log('\x1b[34m%s\x1b[0m', 'pv is updated...');
+    });
   }
 });
 
@@ -79,6 +81,21 @@ exports = module.exports = {
             .then(
               function() {
                 return Post.count();
+              }
+            );
+  },
+
+  delete(titleKeyWord) {
+    return Post.sync()
+            .then(
+              function() {
+                return Post.destroy({
+                  where: {
+                    title: {
+                      $like: `%${titleKeyWord}%`,
+                    },
+                  },
+                });
               }
             );
   },

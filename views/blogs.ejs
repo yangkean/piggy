@@ -11,9 +11,9 @@
   }
   %>
 </div>
-<div class="piggy-pagination"></div>
+<div class="piggy-pagination"><%- pagination %></div>
 <% if(/\/posts$/.test(path)) { %>
-<%- include('components/footer', {index: index, total: total}) %>
+<%- include('components/footer', {total: total}) %>
 <% } else { %>
 <%- include('components/footer') %>
 <% } %>

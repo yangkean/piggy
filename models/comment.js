@@ -13,7 +13,9 @@ Comment.hook('afterCreate', function(comment, options) {
           postId: comment.postId,
         },
       })
-      .then(() => console.log('\x1b[34m%s\x1b[0m', 'commentsCount is updated...'));
+      .then(() => {
+        // console.log('\x1b[34m%s\x1b[0m', 'commentsCount is updated...')
+      });
     }
   );
 });
@@ -54,4 +56,17 @@ exports = module.exports = {
               }
             );
   },
+
+  delete(postId) {
+    return Comment.sync()
+            .then(
+              function() {
+                return Comment.destroy({
+                  where: {
+                    postId: postId,
+                  },
+                });
+              }
+            );
+  }
 };

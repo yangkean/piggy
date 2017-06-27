@@ -25,4 +25,17 @@ exports = module.exports = {
               }
             );
   },
+
+  delete(username) {
+    return User.sync()
+            .then(
+              function() {
+                return User.destroy({
+                  where: {
+                    username: username,
+                  },
+                });
+              }
+            );
+  }
 };

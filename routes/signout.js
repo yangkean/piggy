@@ -5,7 +5,7 @@ router.get('/', (req, res, next) => {
   // 清空用户信息
   req.session.user = null;
 
-  res.redirect('back');
+  res.redirect('/home');
 });
 
 exports = module.exports = router;

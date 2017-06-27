@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const emitter = require('events').EventEmitter;
 const formidable = require('express-formidable'); // 处理表单提交的中间件
 const session = require('express-session'); // express 的 session 中间件
 const flash = require('connect-flash'); // 显示通知的中间件
@@ -15,6 +16,8 @@ const sequelize = require('./models/db').dbConnection;
 const sequelizeStore = new SequelizeStore({
   db: sequelize,
 });
+
+emitter.prototype._maxListeners = 50;
 
 // 设置静态资源文件目录
 app.use(express.static(path.join(__dirname, 'public')));
@@ -41,7 +44,7 @@ app.use(flash()); // 注意 `connect-flash` 中间件会在初始化时修改 se
 
 // 处理表单提交
 app.use(formidable({
-  encoding: 'utf8mb4',
+  encoding: 'utf8',
 }));
 
 // 设置模版全局变量
@@ -66,7 +69,7 @@ routes(app);
 
 // 错误处理
 app.use((err, req, res, next) => {
-  console.error('\x1b[31m%s\x1b[0m', err.stack);
+  // console.error('\x1b[31m%s\x1b[0m', err.stack);
 
   res.status(500).send('Something broke!');
 });
@@ -74,6 +77,11 @@ app.use((err, req, res, next) => {
 // 数据库备份
 schedule.scheduleJob({hour: 1, minute: 0}, backup);
 
-app.listen(config.port, () => {
-  console.log(`Server is listening on http://localhost:${config.port}`);
-});
+if(module.parent) {
+  exports = module.exports = app;
+}
+else {
+  app.listen(config.port, () => {
+    console.log(`Server is listening on http://localhost:${config.port}`);
+  });
+}

@@ -18,8 +18,6 @@
 
   <%# 上下页跳转 %>
   <% if(/\/posts$/.test(path)) { %>
-  document.querySelector('.piggy-pagination').innerHTML = showPagination(<%= index %>, <%= total %>);
-
   const total = <%= total %>;
   const lastPage = document.querySelector('.piggy-last-page');
   const nextPage = document.querySelector('.piggy-next-page');

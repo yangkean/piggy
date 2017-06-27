@@ -37,3 +37,5 @@ function showPagination(index, total) {
 
   return paginationStr;
 }
+
+exports = module.exports = showPagination;

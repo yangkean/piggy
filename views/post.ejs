@@ -25,11 +25,12 @@
         if(comments) {
           comments.forEach((comment) => {
       %>
-        <%- include('components/comment', {comment: comment}) %>
+        <%- include('components/comment', {comment: comment, user: user}) %>
       <%
           })
         }
       %>
+      <% if(user) { %>
       <form class="ui reply form" method="post">
         <div class="field">
           <textarea name="comment" required></textarea>
@@ -37,6 +38,7 @@
         <input type="submit" class="ui teal submit button" value="发表">
       </form>
       <%- include('components/notification') %>
+      <% } %>
     </div>
   </div>
   <div class="ui raised three wide segment piggy-sidebar">

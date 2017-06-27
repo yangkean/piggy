@@ -44,10 +44,11 @@ router.get('/editing', (req, res, next) => {
 router.post('/editing', (req, res, next) => {
   const owner = config.site.owner;
   const introduction = html.escape(req.fields.introduction.trim());
-  const email = req.fields.email.trim() || '';
-  const github = req.fields.github.trim() || '';
-  const weibo = req.fields.weibo.trim() || '';
-  const twitter = req.fields.twitter.trim() || '';
+  const email = req.fields.email.trim();
+  const github = req.fields.github.trim();
+  const weibo = req.fields.weibo.trim();
+  const twitter = req.fields.twitter.trim();
+  const user = req.session.user;
 
   const home = {
     owner,
@@ -58,15 +59,20 @@ router.post('/editing', (req, res, next) => {
     twitter,
   };
 
-  HomeModel.edit(home)
-  .then(
-    function() {
-      req.flash('success', '编辑成功');
+  if(user && user.username === owner) {
+    HomeModel.edit(home)
+    .then(
+      function() {
+        req.flash('success', '编辑成功');
 
-      res.redirect('/home');
-    }
-  )
-  .catch(next);
+        res.redirect('/home');
+      }
+    )
+    .catch(next);
+  }
+  else {
+    res.send('You have no permission to do this!');
+  }
 });
 
 exports = module.exports = router;

@@ -34,7 +34,7 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res, next) => {
   const username = req.fields.username.trim();
-  const website = req.fields.webiste.trim() || '';
+  const website = req.fields.website.trim();
   const email = req.fields.email.trim();
   const password = req.fields.password.trim();
   const repassword = req.fields.repassword.trim();
@@ -64,7 +64,7 @@ router.post('/', (req, res, next) => {
   const user = {
     username: escape(req.fields.username),
     uid: uid,
-    website: encodeURI(req.fields.website || ''),
+    website: encodeURI(req.fields.website.trim()),
     email: req.fields.email,
     password: hash,
   };

@@ -12,6 +12,7 @@ const sequelize = new Sequelize(config.mysql.database, config.mysql.username, co
   dialectOptions: { // 这里的选项将直接传给连接库
     charset: config.mysql.charset,
   },
+  logging: false, // 禁止打印 SQL 语句
 });
 
 // 定义用户信息模型

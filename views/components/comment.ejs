@@ -11,6 +11,7 @@
     <div class="text">
       <%- comment.content %>
     </div>
+    <% if(user) { %>
     <div class="actions">
       <a class="piggy-reply">回复</a>
       <div class="ui small modal">
@@ -28,5 +29,6 @@
         </div>
       </div>
     </div>
+    <% } %>
   </div>
 </div>

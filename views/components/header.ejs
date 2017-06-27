@@ -30,9 +30,6 @@
   <% if(path === '/home/editing' || /\/posts\/[0-9a-f]{64}\/editing/.test(path)) { %>
   <script src="//cdn.bootcss.com/marked/0.3.6/marked.min.js"></script>
   <% } %>
-  <% if(/\/posts$/.test(path)) { %>
-  <script src="/js/pagination.js"></script>
-  <% } %>
   <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
   <!-- <script src="//cdn.bootcss.com/semantic-ui/2.2.10/semantic.min.js"></script> -->
   <script src="//cdn.bootcss.com/semantic-ui/2.2.10/components/dropdown.min.js"></script>

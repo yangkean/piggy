@@ -7,6 +7,7 @@ const PostModel = require('../models/post');
 const InfoModel = require('../models/info');
 const CommentModel = require('../models/comment');
 const config = require('config-lite')(__dirname);
+const pagination = require('../middleware/pagination');
 
 // 增加 `TODO lists` 功能
 const renderer = new marked.Renderer();
@@ -26,35 +27,36 @@ marked.setOptions({
 });
 
 const limit = 5; // 每页限制文章数
-let total; // 存储总页数
-PostModel.count()
-.then(
-  function(totalItem) {
-    total = Math.ceil(totalItem / limit);
-  }
-);
 
 router.get('/', (req, res, next) => {
   let index = Number.parseInt(req.query.page) || 1;
 
-  if(index > total) index = total;
-  if(index < 1) index = 1;
-
-  const offset = limit * (index - 1);
-
-  PostModel.findAll({offset, limit})
+  PostModel.count()
   .then(
-    function(posts) {
-      if(posts.length > 0) {
-        posts.forEach((post) => {
-          post.content = marked(post.content);
-        });
-      }
+    function(totalItem) {
+      const total = Math.ceil(totalItem / limit); // 存储总页数
 
-      res.render('blogs', {posts: posts, index: index, total: total});
+      if(index > total) index = total;
+      if(index < 1) index = 1;
+
+      const offset = limit * (index - 1);
+      const paginationElements = pagination(index, total);
+
+      PostModel.findAll({offset, limit})
+      .then(
+        function(posts) {
+          if(posts.length > 0) {
+            posts.forEach((post) => {
+              post.content = marked(post.content);
+            });
+          }
+
+          res.render('blogs', {posts: posts, total: total, pagination: paginationElements});
+        }
+      )
+      .catch(next);
     }
-  )
-  .catch(next);
+  );
 });
 
 router.get('/creation', (req, res) => {
@@ -128,12 +130,15 @@ router.post('/creation', (req, res, next) => {
     )
     .catch(next);
   }
+  else {
+    res.send('You have no permission to do this!');
+  }
 });
 
 router.get('/tags/:tag?', (req, res, next) => {
-  const tag = req.params.tag;
+  const tag = req.params.tag ? req.params.tag.trim() : '';
 
-  PostModel.findAll({tag})
+  PostModel.findAll({tag, limit: 50})
   .then(
     function(posts) {
       if(posts.length > 0) {
@@ -142,22 +147,21 @@ router.get('/tags/:tag?', (req, res, next) => {
         });
       }
 
-      res.render('blogs', {posts: posts});
+      res.render('blogs', {posts: posts, pagination: ''});
     }
   )
   .catch(next);
 });
 
 router.get('/:postId', (req, res, next) => {
+  const user = req.session.user;
   const postId = req.params.postId;
 
   PostModel.findOne(postId)
   .then(
     function(post) {
       if(!post) {
-        req.flash('error', '文章不存在');
-
-        return res.redirect('/posts');
+        return res.send('404 Not Found');
       }
 
       res.locals.postId = postId;
@@ -169,7 +173,7 @@ router.get('/:postId', (req, res, next) => {
           InfoModel.findOne('tags')
           .then(
             function(tags) {
-              res.render('post', {post: post, comments: comments, tags: tags.content.split(' ')});
+              res.render('post', {post: post, comments: comments, tags: tags.content.split(' '), user: user});
             }
           );
         }
@@ -253,6 +257,10 @@ router.post('/:postId/editing', (req, res, next) => {
 });
 
 router.post('/:postId/:repliedCommentId?', (req, res, next) => {
+  if(!req.session.user) {
+    return res.send('You have no permission to do this!');
+  }
+
   const postId = req.params.postId;
   const commentId = (Date.now()).toString();
   const author = req.session.user.username;
@@ -268,7 +276,7 @@ router.post('/:postId/:repliedCommentId?', (req, res, next) => {
   catch(e) {
     req.flash('error', e.message);
 
-    return res.redirect('back');
+    return res.redirect(`/posts/${postId}`);
   };
 
   const comment = {
@@ -307,7 +315,7 @@ router.post('/:postId/:repliedCommentId?', (req, res, next) => {
     function() {
       req.flash('success', '发表成功');
 
-      res.redirect('back');
+      res.redirect(`/posts/${postId}`);
     }
   )
   .catch(next);
