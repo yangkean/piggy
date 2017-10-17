@@ -7,7 +7,7 @@ const PostModel = require('../models/post');
 const InfoModel = require('../models/info');
 const CommentModel = require('../models/comment');
 const config = require('config-lite')(__dirname);
-const pagination = require('../middleware/pagination');
+const pagination = require('../plugin/pagination');
 
 // 增加 `TODO lists` 功能
 const renderer = new marked.Renderer();

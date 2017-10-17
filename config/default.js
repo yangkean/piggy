@@ -5,7 +5,7 @@ exports = module.exports = {
     owner: 'Sam Yang',
     password: 'sam',
   },
-  port: 3000,
+  port: 3001,
   session: {
     name: 'piggy',
     secret: 'piggy',

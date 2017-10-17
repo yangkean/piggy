@@ -1,6 +1,6 @@
 const path = require('path');
 const express = require('express');
-const emitter = require('events').EventEmitter;
+const EventEmitter = require('events');
 const formidable = require('express-formidable'); // 处理表单提交的中间件
 const session = require('express-session'); // express 的 session 中间件
 const flash = require('connect-flash'); // 显示通知的中间件
@@ -17,7 +17,7 @@ const sequelizeStore = new SequelizeStore({
   db: sequelize,
 });
 
-emitter.prototype._maxListeners = 50;
+EventEmitter.defaultMaxListeners = 100;
 
 // 设置静态资源文件目录
 app.use(express.static(path.join(__dirname, 'public')));
